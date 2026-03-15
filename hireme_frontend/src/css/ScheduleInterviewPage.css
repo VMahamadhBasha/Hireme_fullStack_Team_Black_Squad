@@ -1,0 +1,93 @@
+.schedule-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.schedule-form {
+  padding: 32px;
+}
+
+.schedule-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 16px;
+}
+
+.interviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.interview-card {
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.interview-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.interview-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.interview-avatar {
+  width: 46px;
+  height: 46px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.interview-info {
+  flex: 1;
+}
+
+.interview-candidate {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 2px;
+}
+
+.interview-email {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.interview-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  color: #6b7280;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.interview-details span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

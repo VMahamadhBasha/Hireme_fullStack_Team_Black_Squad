@@ -1,0 +1,34 @@
+.post-job-header {
+  margin-bottom: 10px;
+}
+
+.post-job-card {
+  padding: 36px;
+}
+
+.post-job-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.form-section-title:first-child {
+  margin-top: 0;
+}

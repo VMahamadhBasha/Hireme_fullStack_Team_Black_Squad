@@ -1,0 +1,13 @@
+.all-jobs-table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+  text-align: center;
+}
+
+.data-table th:nth-child(6),
+.data-table td:nth-child(6) {
+  text-align: center;
+}

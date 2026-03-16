@@ -1,49 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/JobSeekerDashboard.css';
 
 function JobSeekerDashboard({ user }) {
   var navigate = useNavigate();
 
-  // TODO: Uncomment when backend is ready
-  // var [stats, setStats] = useState({ applied: 0, interviews: 0, saved: 0 });
-  // fetch('http://localhost:8080/api/jobseeker/stats?userId=' + user.id)
-  // .then(function(res) { return res.json(); })
-  // .then(function(data) { setStats(data); });
+  var [applications, setApplications] = useState([]);
+  var [loading, setLoading] = useState(true);
+  var [error, setError] = useState('');
+
+  useEffect(function() {
+    fetch('http://localhost:8080/api/candidate/applications?candidateId=' + user.id)
+    .then(function(res) {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
+    .then(function(data) {
+      setApplications(data);
+      setLoading(false);
+    })
+    .catch(function() {
+      setError('Failed to load applications.');
+      setLoading(false);
+    });
+  }, [user.id]);
+
+  var totalApplied  = applications.length;
+  var shortlisted   = applications.filter(function(a) { return a.applicationStatus === 'SHORTLISTED'; }).length;
+  var interviews    = applications.filter(function(a) { return a.applicationStatus === 'INTERVIEW'; }).length;
+  var hired         = applications.filter(function(a) { return a.applicationStatus === 'HIRED'; }).length;
 
   var stats = [
-    { label: 'Jobs Applied', value: 12, icon: '📋' },
-    { label: 'Interviews', value: 3, icon: '🎯' },
-    { label: 'Saved Jobs', value: 7, icon: '🔖' },
-    { label: 'Profile Views', value: 24, icon: '👁️' }
+    { label: 'Jobs Applied',  value: totalApplied, icon: '📋' },
+    { label: 'Shortlisted',   value: shortlisted,  icon: '⭐' },
+    { label: 'Interviews',    value: interviews,   icon: '🎯' },
+    { label: 'Hired',         value: hired,        icon: '✅' }
   ];
 
-  var recentJobs = [
-    { id: 1, title: 'Frontend Developer', company: 'TechCorp', location: 'Hyderabad', status: 'APPLIED' },
-    { id: 2, title: 'React Developer', company: 'Infosys', location: 'Bangalore', status: 'INTERVIEW' },
-    { id: 3, title: 'UI Engineer', company: 'Wipro', location: 'Chennai', status: 'REJECTED' },
-    { id: 4, title: 'Full Stack Developer', company: 'TCS', location: 'Pune', status: 'APPLIED' }
-  ];
+  var recentApplications = applications.slice(0, 4);
+
+  function getJobTitle(app) {
+    if (app.job && app.job.title) return app.job.title;
+    return 'Job #' + (app.jobId || app.id);
+  }
+
+  function getJobLocation(app) {
+    if (app.job && app.job.location) return app.job.location;
+    return '—';
+  }
 
   function getStatusClass(status) {
-    if (status === 'APPLIED') return 'badge badge-blue';
-    if (status === 'INTERVIEW') return 'badge badge-green';
-    if (status === 'REJECTED') return 'badge badge-red';
-    return 'badge badge-yellow';
+    if (status === 'APPLIED')     return 'badge badge-blue';
+    if (status === 'SHORTLISTED') return 'badge badge-yellow';
+    if (status === 'INTERVIEW')   return 'badge badge-yellow';
+    if (status === 'HIRED')       return 'badge badge-green';
+    if (status === 'REJECTED')    return 'badge badge-red';
+    return 'badge badge-blue';
   }
+
+  var displayName = user.name || user.email || 'User';
+
+  if (loading) return <div className="page-container"><p>Loading dashboard...</p></div>;
 
   return (
     <div className="page-container">
 
       <div className="dashboard-welcome">
         <div>
-          <h1 className="page-title">Welcome back, {user.name}! 👋</h1>
+          <h1 className="page-title">Welcome back, {displayName}! 👋</h1>
           <p className="dashboard-subtitle">Here's what's happening with your job search</p>
         </div>
-        <button className="btn-primary" onClick={function() { navigate('/jobseeker/browse'); }}>
+        <button className="btn-primary" onClick={function() { navigate('/candidate/browse'); }}>
           Browse Jobs
         </button>
       </div>
+
+      {error && <p className="error-msg">{error}</p>}
 
       <div className="stats-grid">
         {stats.map(function(stat, index) {
@@ -60,33 +92,39 @@ function JobSeekerDashboard({ user }) {
       <div className="card">
         <div className="section-header">
           <h2>Recent Applications</h2>
-          <button className="btn-secondary" onClick={function() { navigate('/jobseeker/applications'); }}>
+          <button className="btn-secondary" onClick={function() { navigate('/candidate/applications'); }}>
             View All
           </button>
         </div>
 
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Job Title</th>
-              <th>Company</th>
-              <th>Location</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recentJobs.map(function(job) {
-              return (
-                <tr key={job.id}>
-                  <td>{job.title}</td>
-                  <td>{job.company}</td>
-                  <td>{job.location}</td>
-                  <td><span className={getStatusClass(job.status)}>{job.status}</span></td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {recentApplications.length === 0 ? (
+          <p style={{ padding: '20px', color: '#888' }}>
+            No applications yet. Click "Browse Jobs" to get started!
+          </p>
+        ) : (
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentApplications.map(function(app) {
+                return (
+                  <tr key={app.id}>
+                    <td>{getJobTitle(app)}</td>
+                    <td>{getJobLocation(app)}</td>
+                    <td>{app.applyDate}</td>
+                    <td><span className={getStatusClass(app.applicationStatus)}>{app.applicationStatus}</span></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
 
     </div>

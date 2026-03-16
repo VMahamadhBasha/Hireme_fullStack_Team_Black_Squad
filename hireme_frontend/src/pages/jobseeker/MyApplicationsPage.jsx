@@ -1,44 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../css/MyApplicationsPage.css';
 
 function MyApplicationsPage({ user }) {
 
-  // TODO: Uncomment when backend is ready
-  // var [applications, setApplications] = useState([]);
-  // fetch('http://localhost:8080/api/applications/candidate/' + user.id)
-  // .then(function(res) { return res.json(); })
-  // .then(function(data) { setApplications(data); });
-
-  var applications = [
-    { id: 1, title: 'Frontend Developer', company: 'TechCorp', location: 'Hyderabad', type: 'Full Time', salary: '6-8 LPA', appliedDate: '2024-03-01', status: 'APPLIED' },
-    { id: 2, title: 'React Developer', company: 'Infosys', location: 'Bangalore', type: 'Full Time', salary: '8-12 LPA', appliedDate: '2024-03-03', status: 'INTERVIEW' },
-    { id: 3, title: 'UI Engineer', company: 'Wipro', location: 'Chennai', type: 'Contract', salary: '5-7 LPA', appliedDate: '2024-02-28', status: 'REJECTED' },
-    { id: 4, title: 'Full Stack Developer', company: 'TCS', location: 'Pune', type: 'Full Time', salary: '10-14 LPA', appliedDate: '2024-03-05', status: 'APPLIED' },
-    { id: 5, title: 'Java Developer', company: 'HCL', location: 'Hyderabad', type: 'Full Time', salary: '7-10 LPA', appliedDate: '2024-03-06', status: 'SELECTED' }
-  ];
-
+  var [applications, setApplications] = useState([]);
   var [filter, setFilter] = useState('ALL');
+  var [loading, setLoading] = useState(true);
+  var [error, setError] = useState('');
+
+  useEffect(function() {
+    fetch('http://localhost:8080/api/candidate/applications?candidateId=' + user.id)
+    .then(function(res) {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
+    .then(function(data) {
+      setApplications(data);
+      setLoading(false);
+    })
+    .catch(function() {
+      setError('Failed to load applications.');
+      setLoading(false);
+    });
+  }, [user.id]);
 
   var filteredApplications = applications.filter(function(app) {
     if (filter === 'ALL') return true;
-    return app.status === filter;
+    return app.applicationStatus === filter;
   });
 
+  function getJobTitle(app) {
+    if (app.job && app.job.title) return app.job.title;
+    return 'Job #' + (app.jobId || app.id);
+  }
+
+  function getJobLocation(app) {
+    if (app.job && app.job.location) return app.job.location;
+    return '—';
+  }
+
+  function getJobSalary(app) {
+    if (app.job && app.job.salaryRange) return app.job.salaryRange;
+    return '—';
+  }
+
   function getStatusClass(status) {
-    if (status === 'APPLIED') return 'badge badge-blue';
-    if (status === 'INTERVIEW') return 'badge badge-yellow';
-    if (status === 'SELECTED') return 'badge badge-green';
-    if (status === 'REJECTED') return 'badge badge-red';
+    if (status === 'APPLIED')     return 'badge badge-blue';
+    if (status === 'SHORTLISTED') return 'badge badge-yellow';
+    if (status === 'INTERVIEW')   return 'badge badge-yellow';
+    if (status === 'HIRED')       return 'badge badge-green';
+    if (status === 'REJECTED')    return 'badge badge-red';
     return 'badge badge-blue';
   }
+
+  if (loading) return <div className="page-container"><p>Loading applications...</p></div>;
 
   return (
     <div className="page-container">
 
       <h1 className="page-title">My Applications</h1>
 
+      {error && <p className="error-msg">{error}</p>}
+
       <div className="filter-tabs">
-        {['ALL', 'APPLIED', 'INTERVIEW', 'SELECTED', 'REJECTED'].map(function(tab) {
+        {['ALL', 'APPLIED', 'SHORTLISTED', 'INTERVIEW', 'HIRED', 'REJECTED'].map(function(tab) {
           return (
             <button
               key={tab}
@@ -61,20 +86,24 @@ function MyApplicationsPage({ user }) {
           return (
             <div className="application-card card" key={app.id}>
               <div className="application-left">
-                <div className="app-company-logo">{app.company.charAt(0)}</div>
+                <div className="app-company-logo">{getJobTitle(app).charAt(0)}</div>
                 <div className="app-info">
-                  <h3 className="app-title">{app.title}</h3>
-                  <p className="app-company">{app.company}</p>
+                  <h3 className="app-title">{getJobTitle(app)}</h3>
+                  <p className="app-company">{getJobLocation(app)}</p>
                   <div className="app-meta">
-                    <span>📍 {app.location}</span>
-                    <span>💼 {app.type}</span>
-                    <span>💰 {app.salary}</span>
+                    <span>📍 {getJobLocation(app)}</span>
+                    <span>💰 {getJobSalary(app)}</span>
                   </div>
+                  {app.coverLetter && (
+                    <p className="app-cover-letter">📝 {app.coverLetter}</p>
+                  )}
                 </div>
               </div>
               <div className="application-right">
-                <span className={getStatusClass(app.status)}>{app.status}</span>
-                <p className="app-date">Applied: {app.appliedDate}</p>
+                <span className={getStatusClass(app.applicationStatus)}>
+                  {app.applicationStatus}
+                </span>
+                <p className="app-date">Applied: {app.applyDate}</p>
               </div>
             </div>
           );

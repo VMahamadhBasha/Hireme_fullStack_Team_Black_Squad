@@ -11,10 +11,12 @@ function ViewApplicantsPage() {
   var [error, setError] = useState('');
   var [filter, setFilter] = useState('ALL');
 
-  // fetch applicants when page loads
   useEffect(function() {
     fetch('http://localhost:8080/api/employer/applications?jobId=' + jobId)
-    .then(function(res) { return res.json(); })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
     .then(function(data) {
       setApplicants(data);
       setLoading(false);
@@ -35,18 +37,30 @@ function ViewApplicantsPage() {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(function(res) { return res.json(); })
+    .then(function(res) { return res.text(); })
     .then(function() {
-      // update status in UI without reloading
       setApplicants(applicants.map(function(a) {
-        return a.id === applicantId
-          ? Object.assign({}, a, { applicationStatus: newStatus })
-          : a;
+        return a.id === applicantId ? Object.assign({}, a, { applicationStatus: newStatus }) : a;
       }));
     })
-    .catch(function() {
-      setError('Failed to update status.');
-    });
+    .catch(function() { setError('Failed to update status.'); });
+  }
+
+  // FIXED: safe helper functions to avoid charAt on undefined
+  function getCandidateName(applicant) {
+    if (applicant.candidate && applicant.candidate.name) return applicant.candidate.name;
+    return 'Unknown';
+  }
+
+  function getCandidateEmail(applicant) {
+    if (applicant.candidate && applicant.candidate.email) return applicant.candidate.email;
+    return '-';
+  }
+
+  function getAvatarLetter(applicant) {
+    var name = getCandidateName(applicant);
+    if (name && name !== 'Unknown') return name.charAt(0).toUpperCase();
+    return 'A';
   }
 
   function getStatusClass(status) {
@@ -58,9 +72,7 @@ function ViewApplicantsPage() {
     return 'badge badge-blue';
   }
 
-  if (loading) {
-    return <div className="page-container"><p>Loading applicants...</p></div>;
-  }
+  if (loading) return <div className="page-container"><p>Loading applicants...</p></div>;
 
   return (
     <div className="page-container">
@@ -100,24 +112,20 @@ function ViewApplicantsPage() {
         {filteredApplicants.map(function(applicant) {
           return (
             <div className="applicant-card card" key={applicant.id}>
-
               <div className="applicant-left">
+
+                {/* FIXED: use helper function — no more direct .charAt() on possibly undefined */}
                 <div className="applicant-avatar">
-                  {applicant.candidate
-                    ? applicant.candidate.name.charAt(0)
-                    : 'A'}
+                  {getAvatarLetter(applicant)}
                 </div>
+
                 <div className="applicant-info">
-                  <h3 className="applicant-name">
-                    {applicant.candidate ? applicant.candidate.name : 'Unknown'}
-                  </h3>
+                  <h3 className="applicant-name">{getCandidateName(applicant)}</h3>
                   <div className="applicant-meta">
-                    <span>✉️ {applicant.candidate ? applicant.candidate.email : '-'}</span>
+                    <span>✉️ {getCandidateEmail(applicant)}</span>
                     <span>📅 Applied: {applicant.applyDate}</span>
                   </div>
-                  <p className="applicant-skills">
-                    📝 {applicant.coverLetter}
-                  </p>
+                  <p className="applicant-skills">📝 {applicant.coverLetter}</p>
                 </div>
               </div>
 

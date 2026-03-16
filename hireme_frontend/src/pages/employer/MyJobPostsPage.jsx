@@ -10,10 +10,12 @@ function MyJobPostsPage({ user }) {
   var [loading, setLoading] = useState(true);
   var [error, setError] = useState('');
 
-  // fetch jobs from backend when page loads
   useEffect(function() {
-    fetch('http://localhost:8080/api/employer/jobs?employerId=' + user.id)
-    .then(function(res) { return res.json(); })
+    fetch('http://localhost:8080/jobs?employerId=' + user.id)
+    .then(function(res) {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
     .then(function(data) {
       setJobs(data);
       setLoading(false);
@@ -30,41 +32,26 @@ function MyJobPostsPage({ user }) {
   });
 
   function handleClose(jobId) {
-    fetch('http://localhost:8080/api/employer/job/' + jobId + '/close', {
-      method: 'PUT'
+    fetch('http://localhost:8080/job/' + jobId + '/close', { method: 'PUT' })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
     })
-    .then(function(res) { return res.json(); })
     .then(function() {
       setJobs(jobs.map(function(j) {
         return j.id === jobId ? Object.assign({}, j, { status: 'CLOSED' }) : j;
       }));
     })
-    .catch(function() {
-      setError('Failed to close job.');
-    });
-  }
-
-  function handleDelete(jobId) {
-    fetch('http://localhost:8080/api/employer/job/' + jobId, {
-      method: 'DELETE'
-    })
-    .then(function() {
-      setJobs(jobs.filter(function(j) { return j.id !== jobId; }));
-    })
-    .catch(function() {
-      setError('Failed to delete job.');
-    });
+    .catch(function() { setError('Failed to close job.'); });
   }
 
   function getStatusClass(status) {
-    if (status === 'OPEN') return 'badge badge-green';
+    if (status === 'OPEN')   return 'badge badge-green';
     if (status === 'CLOSED') return 'badge badge-red';
     return 'badge badge-yellow';
   }
 
-  if (loading) {
-    return <div className="page-container"><p>Loading jobs...</p></div>;
-  }
+  if (loading) return <div className="page-container"><p>Loading jobs...</p></div>;
 
   return (
     <div className="page-container">
@@ -95,17 +82,12 @@ function MyJobPostsPage({ user }) {
       <p className="results-count">{filteredJobs.length} jobs found</p>
 
       <div className="job-posts-list">
-        {filteredJobs.length === 0 && (
-          <div className="empty-state">No job posts found.</div>
-        )}
+        {filteredJobs.length === 0 && <div className="empty-state">No job posts found.</div>}
         {filteredJobs.map(function(job) {
           return (
             <div className="job-post-card card" key={job.id}>
-
               <div className="job-post-left">
-                <div className="job-post-logo">
-                  {job.title.charAt(0)}
-                </div>
+                <div className="job-post-logo">{job.title.charAt(0)}</div>
                 <div className="job-post-info">
                   <h3 className="job-post-title">{job.title}</h3>
                   <div className="job-post-meta">
@@ -115,11 +97,8 @@ function MyJobPostsPage({ user }) {
                   </div>
                 </div>
               </div>
-
               <div className="job-post-right">
-                <span className={getStatusClass(job.status)}>
-                  {job.status}
-                </span>
+                <span className={getStatusClass(job.status)}>{job.status}</span>
                 <div className="job-post-actions">
                   <button
                     className="btn-secondary small-btn"
@@ -135,15 +114,11 @@ function MyJobPostsPage({ user }) {
                       Close Job
                     </button>
                   )}
-                  <button
-                    className="btn-danger small-btn"
-                    onClick={function() { handleDelete(job.id); }}
-                  >
+                  <button className="btn-danger small-btn" disabled title="Add @DeleteMapping in backend to enable">
                     Delete
                   </button>
                 </div>
               </div>
-
             </div>
           );
         })}

@@ -9,10 +9,12 @@ function EmployerDashboard({ user }) {
   var [loading, setLoading] = useState(true);
   var [error, setError] = useState('');
 
-  // fetch employer jobs when page loads
   useEffect(function() {
-    fetch('http://localhost:8080/api/employer/jobs?employerId=' + user.id)
-    .then(function(res) { return res.json(); })
+    fetch('http://localhost:8080/jobs?employerId=' + user.id)
+    .then(function(res) {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
     .then(function(data) {
       setJobs(data);
       setLoading(false);
@@ -23,37 +25,35 @@ function EmployerDashboard({ user }) {
     });
   }, [user.id]);
 
-  // calculate stats from real jobs data
-  var totalJobs = jobs.length;
-  var openJobs = jobs.filter(function(j) { return j.status === 'OPEN'; }).length;
+  var totalJobs  = jobs.length;
+  var openJobs   = jobs.filter(function(j) { return j.status === 'OPEN'; }).length;
   var closedJobs = jobs.filter(function(j) { return j.status === 'CLOSED'; }).length;
 
   var stats = [
-    { label: 'Jobs Posted', value: totalJobs, icon: '📋' },
-    { label: 'Open Jobs', value: openJobs, icon: '✅' },
-    { label: 'Closed Jobs', value: closedJobs, icon: '🔒' },
-    { label: 'Total Listings', value: totalJobs, icon: '👥' }
+    { label: 'Jobs Posted',    value: totalJobs,  icon: '📋' },
+    { label: 'Open Jobs',      value: openJobs,   icon: '✅' },
+    { label: 'Closed Jobs',    value: closedJobs, icon: '🔒' },
+    { label: 'Total Listings', value: totalJobs,  icon: '👥' }
   ];
 
-  // show only last 4 jobs in recent section
   var recentJobs = jobs.slice(0, 4);
 
   function getStatusClass(status) {
-    if (status === 'OPEN') return 'badge badge-green';
+    if (status === 'OPEN')   return 'badge badge-green';
     if (status === 'CLOSED') return 'badge badge-red';
     return 'badge badge-yellow';
   }
 
-  if (loading) {
-    return <div className="page-container"><p>Loading dashboard...</p></div>;
-  }
+  var displayName = user.name || user.email || 'User';
+
+  if (loading) return <div className="page-container"><p>Loading dashboard...</p></div>;
 
   return (
     <div className="page-container">
 
       <div className="dashboard-welcome">
         <div>
-          <h1 className="page-title">Welcome, {user.name}! 👋</h1>
+          <h1 className="page-title">Welcome, {displayName}! 👋</h1>
           <p className="dashboard-subtitle">Manage your job postings and find the best candidates</p>
         </div>
         <button className="btn-primary" onClick={function() { navigate('/employer/post-job'); }}>
@@ -63,7 +63,6 @@ function EmployerDashboard({ user }) {
 
       {error && <p className="error-msg">{error}</p>}
 
-      {/* Stats from real data */}
       <div className="stats-grid">
         {stats.map(function(stat, index) {
           return (
@@ -76,7 +75,6 @@ function EmployerDashboard({ user }) {
         })}
       </div>
 
-      {/* Recent Jobs from real data */}
       <div className="card">
         <div className="section-header">
           <h2>Recent Job Postings</h2>
@@ -86,9 +84,7 @@ function EmployerDashboard({ user }) {
         </div>
 
         {recentJobs.length === 0 ? (
-          <p style={{ padding: '20px', color: '#888' }}>
-            No jobs posted yet. Click "Post New Job" to get started!
-          </p>
+          <p style={{ padding: '20px', color: '#888' }}>No jobs posted yet.</p>
         ) : (
           <table className="data-table">
             <thead>
@@ -107,11 +103,7 @@ function EmployerDashboard({ user }) {
                     <td>{job.title}</td>
                     <td>{job.location}</td>
                     <td>{job.salaryRange}</td>
-                    <td>
-                      <span className={getStatusClass(job.status)}>
-                        {job.status}
-                      </span>
-                    </td>
+                    <td><span className={getStatusClass(job.status)}>{job.status}</span></td>
                     <td>
                       <button
                         className="btn-secondary small-btn"

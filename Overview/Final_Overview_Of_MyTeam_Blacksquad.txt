@@ -1,0 +1,296 @@
+============================================================
+   HireMe — Job Portal & Recruitment Management System
+        Team Contribution Report | Training Leads
+============================================================
+College : KSRM College of Engineering
+Branch  : CSE - Section B
+Project : HireMe (Microservice-Based Job Portal)
+Stack   : React (Frontend) | Spring Boot (Backend) | MySQL
+Total Members : 11
+============================================================
+
+
+------------------------------------------------------------
+SECTION 1 — MODULE ASSIGNMENTS
+------------------------------------------------------------
+
+BACKEND MODULES
+---------------
+
+1. Authentication & Security Service
+   Name    : V. Mahamadh Basha
+   Roll No : 239Y1A05G6
+   Work    : Developed JWT-based login and registration APIs.
+             Set up Spring Security with role-based access
+             control for Employer, Candidate, and Recruiter.
+             Secured all backend endpoints with role guards.
+
+2. Job Post Management Service
+   Name    : Y. Madhusudhan Reddy
+   Roll No : 239Y1A05H7
+   Work    : Built JobPost entity with full CRUD operations.
+             Employers can create job listings (status=OPEN)
+             and view their own postings via REST APIs.
+
+3. Candidate Job Browser Service
+   Name    : V. Varun Kumar Reddy
+   Roll No : 239Y1A05H3
+   Work    : Created read-only job board endpoint that returns
+             only OPEN jobs to candidates. Supports filtering
+             by job title and location using query parameters.
+
+4. Employer Application Viewing Service
+   Name    : Vadde Vinay
+   Roll No : 239Y1A05G1
+   Work    : Built employer-side view to list all applications
+             received for their job postings. Added ownership
+             validation so employers only see their own jobs.
+
+5. Candidate Application Service
+   Name    : J. Yashwanth
+   Roll No : 239Y1A0573
+   Work    : Developed application submission API for candidates.
+             Prevents duplicate applications. Candidates can
+             view full history of their submitted applications.
+
+6. Candidate Application Service (Support)
+   Name    : V. Vishnu Vardhan
+   Roll No : 239Y1A05G2
+   Work    : Assisted in building the Application entity and
+             service layer. Worked on application status flow
+             and integration with the job post module.
+
+7. Recruiter Application Management Service
+   Name    : Y. Lohith
+   Roll No : 239Y1A05H8
+   Work    : Built recruiter dashboard APIs to view all
+             applications across the platform. Implemented
+             status update flow: APPLIED → SHORTLISTED →
+             INTERVIEW → HIRED / REJECTED.
+
+8. Recruiter Application Service (Support)
+   Name    : V. Santhosh
+   Roll No : 239Y1A05H1
+   Work    : Supported recruiter module by working on
+             application filtering and status management
+             APIs. Assisted in testing endpoints via Postman.
+
+9. Interview Scheduling Service
+   Name    : Virupammagari Ajay
+   Roll No : 239Y1A05H2
+   Work    : Built Interview entity and scheduling API.
+             Interviews can only be created for SHORTLISTED
+             applications. Manages interview status lifecycle:
+             SCHEDULED → COMPLETED / CANCELLED.
+
+10. Interview Scheduling Service (Support)
+    Name    : S. Venkata Kalyan
+    Roll No : 239Y1A05D3
+    Work    : Assisted in interview scheduling module.
+              Worked on validation logic to ensure correct
+              application status before scheduling interviews.
+              Fixed integration errors between modules.
+
+
+FRONTEND MODULE
+---------------
+
+11. Employer Pages — Frontend
+    Name    : Y. Tarun Teja Reddy
+    Roll No : 239Y1A05H5
+    Work    : Built React pages for Employer role including
+              job posting form, employer application inbox.
+              Connected frontend components with backend APIs
+              and handled form validation and error handling.
+
+
+------------------------------------------------------------
+SECTION 2 — WORK PROGRESS BY MEMBER (Date-wise)
+------------------------------------------------------------
+
+Member : V. Mahamadh Basha (239Y1A05G6)
+Task   : Authentication & Security Service (Backend)
+Skills : React, Spring Boot, REST APIs, MySQL, JWT Security
+--
+Mar 04 — Project planning and module discussion
+Mar 05 — Spring Boot backend setup and folder structure
+Mar 06 — Backend development started (entity and repository)
+Mar 07 — Frontend design planning
+Mar 08 — Folder structure organization
+Mar 09 — Frontend development started
+Mar 10 — Routing integration with React Router
+Mar 11 — UI improvements and component cleanup
+Mar 13 — Project redesign + backend setup restart
+Mar 14 — Backend API development continued
+Mar 15 — Frontend and backend integration completed
+
+---
+
+Member : Y. Madhusudhan Reddy (239Y1A05H7)
+Task   : Job Post Management Service (Backend)
+Skills : Spring Boot, REST APIs, MySQL, JPA, React basics
+--
+Mar 05 — Created project in STS, folder structure setup
+Mar 06 — Learned Spring Boot layered architecture
+Mar 07 — Team discussion on HireMe requirements
+Mar 08 — Task division among team
+Mar 09 — GitHub branches created, frontend 50% done
+Mar 10 — Frontend UI improvements
+Mar 11 — Backend setup, solved configuration errors
+Mar 12 — JobPost service logic implemented, tested APIs
+Mar 13 — Connected React frontend with backend auth APIs
+Mar 14 — Controller and service layer setup, DTO classes
+Mar 15 — Backend CRUD completed, bug fixes done
+
+---
+
+Member : V. Varun Kumar Reddy (239Y1A05H3)
+Task   : Candidate Job Browser Service (Backend)
+Skills : Spring Boot, REST APIs, MySQL, Java OOP, React basics
+--
+Mar 05 — Project setup in STS, database connected
+Mar 06 — Studied Spring Boot project structure
+Mar 07 — HireMe project requirements discussed
+Mar 08 — Task planning and work division
+Mar 09 — GitHub branch setup, frontend structure revised
+Mar 10 — Frontend UI enhancements
+Mar 11 — Backend integration started, errors resolved
+       — Auth system work begun (login/registration)
+
+---
+
+Member : Vadde Vinay (239Y1A05G1)
+Task   : Employer Application Viewing Service (Backend)
+Skills : Spring Boot, REST APIs, MySQL, React basics, Java OOP
+--
+Mar 05 — Database connection issue resolved in properties file
+Mar 06 — Spring Boot folder structure corrected
+Mar 07 — Maven dependency issues fixed in pom.xml
+Mar 08 — React project setup issues resolved
+Mar 09 — Import path errors fixed in React components
+Mar 10 — Workflow and flowcharts prepared for project modules
+Mar 11 — Frontend-backend API integration fixed
+
+---
+
+Member : J. Yashwanth (239Y1A0573)
+Task   : Candidate Application Service (Backend)
+Skills : Spring Boot, REST APIs, MySQL, Java OOP, React basics
+--
+Mar 05 — Project created in STS, database connected
+Mar 06 — Learned Spring Boot project structure
+Mar 07 — Team discussion on HireMe project plan
+Mar 08 — Tasks divided among team members
+Mar 09 — GitHub branches created, frontend started
+Mar 10 — Frontend UI improved
+Mar 11 — Backend setup done, auth components started
+
+---
+
+Member : V. Vishnu Vardhan (239Y1A05G2)
+Task   : Candidate Application Service — Support (Backend)
+Skills : Spring Boot, REST APIs, MySQL, Java OOP, React basics
+--
+Mar 05 — Project setup, folder structure, DB connected
+Mar 06 — Spring Boot architecture studied
+Mar 07 — HireMe requirements discussed as a team
+Mar 08 — Work divided among 11 members
+Mar 09 — GitHub branch setup, frontend 50% done
+Mar 10 — Frontend UI improved
+Mar 11 — Backend modules integrated, auth work started
+
+---
+
+Member : Y. Lohith (239Y1A05H8)
+Task   : Recruiter Application Management Service (Backend)
+Skills : Spring Boot, REST APIs, MySQL, React, API Integration
+--
+Mar 05 — Project setup, DB connected
+Mar 06 — Spring Boot project structure studied
+Mar 07 — HireMe project discussion and planning
+Mar 08 — Task responsibilities divided
+Mar 09 — GitHub branches, frontend work started
+Mar 10 — Frontend UI improved
+Mar 11 — Backend setup done, errors resolved
+       — Recruiter module development in progress
+
+---
+
+Member : V. Santhosh (239Y1A05H1)
+Task   : Recruiter Application Service — Support (Backend)
+Skills : Spring Boot, REST APIs, MySQL, Java OOP basics
+--
+Mar 05 onwards — Created project structure, connected MySQL,
+                 worked on entity, repository, service, and
+                 controller layers. Practicing API creation
+                 and testing. Resolving database and runtime
+                 errors as they occur.
+
+---
+
+Member : Virupammagari Ajay (239Y1A05H2)
+Task   : Interview Scheduling Service (Backend)
+Skills : Spring Boot, REST APIs, MySQL, Java OOP, React basics
+--
+Mar 05 — Project setup and DB connected
+Mar 06 — Spring Boot structure learned
+Mar 07 — HireMe requirements discussed
+Mar 08 — Work divided among team
+Mar 09 — GitHub setup, frontend restructured
+Mar 10 — Frontend UI refined
+Mar 11 — Backend integrated, auth components started
+
+---
+
+Member : S. Venkata Kalyan (239Y1A05D3)
+Task   : Interview Scheduling Service — Support (Backend)
+Skills : Spring Boot, REST APIs, MySQL, React basics, Java OOP
+--
+Mar 05 — Database connection error fixed
+Mar 06 — Project folder structure corrected
+Mar 07 — Maven dependency issues resolved
+Mar 08 — React project setup errors fixed
+Mar 09 — React component import errors resolved
+Mar 10 — Project workflow and flowcharts created
+Mar 11 — API integration between frontend and backend fixed,
+          project structure corrected
+
+---
+
+Member : Y. Tarun Teja Reddy (239Y1A05H5)
+Task   : Employer Pages — Frontend (React)
+Skills : React, JSX, React Router, Axios, CSS, Spring Boot basics
+--
+Mar 05 — STS project setup, folder structure, DB connected
+Mar 06 — Spring Boot architecture studied
+Mar 07 — HireMe requirements analyzed with team
+Mar 08 — Tasks divided, development plan finalized
+Mar 09 — GitHub branches set up, frontend 50% built
+Mar 10 — UI/UX improvements applied to frontend pages
+Mar 11 — New STS project initialized, backend modules started
+       — Auth system implemented (login, registration pages)
+
+
+------------------------------------------------------------
+SECTION 3 — TEAM SKILL SUMMARY
+------------------------------------------------------------
+
+Frontend Skills (All Members)  : HTML, CSS, JavaScript, React,
+                                  JSX, Props, State, Hooks,
+                                  React Router, Axios, Form
+                                  Validation, Component Design
+
+Backend Skills (All Members)   : Java OOP, Spring Boot, REST
+                                  APIs, Spring Data JPA, MySQL,
+                                  Entity/Repository/Service/
+                                  Controller layers, Postman
+                                  API Testing, Maven
+
+Advanced (Selected Members)    : JWT Authentication, Spring
+                                  Security, Role-based Access
+                                  Control, Microservice Design,
+                                  Frontend-Backend Integration
+
+============================================================
+            End of Report — HireMe Project Team
+============================================================
